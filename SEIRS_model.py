@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd 
 import matplotlib as mpl 
 import matplotlib.pyplot as plt 
-import seaborn as sns
 
 # Define arrays 
 t = []
@@ -48,34 +47,35 @@ def dR(I, R):
 
 
 for i in range(0,100):
-    t.append(i)
-    # Runge-Kutta Method Order 4 for dS/dt
+    # k for dS/dt
+    # l for dE/dt 
+    # m for dI/dt
+    # n for dR/dt 
+
     k1 = h * dS(R[i], E[i], S[i])
-    k2 = h * dS(R[i]+(h/2), E[i]+(h/2), S[i]+(k1/2))
-    k3 = h * dS(R[i]+(h/2), E[i]+(h/2), S[i]+(k2/2))
-    k4 = h * dS(R[i]+h, E[i]+h, S[i]+k3)
-    S.append(S[i] + (1/6)*(k1 + 2*k2 + 2*k3 + k4))
-
-    # Runge-Kutta Method order 4 for dE/dt 
     l1 = h * dE(S[i], E[i]) 
-    l2 = h * dE(S[i]+(h/2), E[i]+(l1/2)) 
-    l3 = h * dE(S[i]+(h/2), E[i]+(l2/2)) 
-    l4 = h * dE(S[i]+h, E[i]+l3)
-    E.append(E[i] + (1/6)*(l1 + 2*l2 + 2*l3 + l4))
-
-    # Runge-Kutta Method order 4 for dI/dt 
     m1 = h * dI(E[i], I[i]) 
-    m2 = h * dI(E[i]+(h/2), I[i]+(m1/2))
-    m3 = h * dI(E[i]+(h/2), I[i]+(m2/2))
-    m4 = h * dI(E[i]+h, I[i]+m3)
-    I.append(I[i] + (1/6)*(m1 + 2*m2 + 2*m3 + m4))
-
-    # Runge-Kutta Method order 4 for dR/dt 
     n1 = h * dR(I[i], R[i]) 
-    n2 = h * dR(I[i]+(h/2), R[i]+(n1/2)) 
-    n3 = h * dR(I[i]+(h/2), R[i]+(n2/2)) 
-    n4 = h * dR(I[i]+h, R[i]+n3)
-    R.append(R[i] + (1/6)*(n1 + 2*n2 + 2*n3 + n4))
+
+    k2 = h * dS(R[i]+(h/2)*(n1), E[i]+(h/2)*(l1), S[i]+(k1/2))
+    l2 = h * dE(S[i]+(h/2)*(l1), E[i]+(l1/2))
+    m2 = h * dI(E[i]+(l1/2), I[i]+(m1/2))
+    n2 = h * dR(I[i]+(m1/2), R[i]+(n1/2)) 
+
+    k3 = h * dS(R[i]+(h/2)*(n2), E[i]+(h/2)*(l2), S[i]+(k2/2))
+    l3 = h * dE(S[i]+(k2/2), E[i]+(l2/2)) 
+    m3 = h * dI(E[i]+(l2/2), I[i]+(m2/2))
+    n3 = h * dR(I[i]+(m2/2), R[i]+(n2/2)) 
+
+    k4 = h * dS(R[i]+n3, E[i]+l3, S[i]+k3)
+    l4 = h * dE(S[i]+k3, E[i]+l3)
+    m4 = h * dI(E[i]+l3, I[i]+m3)
+    n4 = h * dR(I[i]+m3, R[i]+n3)
+
+    S.append(S[i] + ((1/6) * h * (k1 + 2*k2 + 2*k3 + k4)))
+    E.append(E[i] + ((1/6) * h * (l1 + 2*l2 + 2*l3 + l4)))
+    I.append(I[i] + ((1/6) * h * (m1 + 2*m2 + 2*m3 + m4)))
+    R.append(R[i] + ((1/6) * h * (n1 + 2*n2 + 2*n3 + n4)))
 
 t = list(range(0,101))
 d = {'t':t, 'S(t)':S, 'E(t)':E, 'I(t)':I, 'R(t)':R}
