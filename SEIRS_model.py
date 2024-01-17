@@ -45,7 +45,7 @@ def dI(E, I):
 def dR(I, R):
     return gamma*I + sigma*theta*N - delta*R - mu*R
 
-
+# RK4 calculation
 for i in range(0,100):
     # k for dS/dt
     # l for dE/dt 
