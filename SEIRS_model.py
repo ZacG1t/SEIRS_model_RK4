@@ -15,10 +15,16 @@ dI = []
 dR = []
 
 # Define initial variables 
-S.append(8771761)    # No of population susceptible to Rubella
-E.append(142)        # No of population with symptoms of Rubella 
-I.append(37)        # No of population infected with Rubella 
-R.append(30)         # No of population recovered from Rubella 
+S0 = 8771761/(8771761+142+37+30)
+E0 = 142/(8771761+142+37+30) 
+I0 = 37/(8771761+142+37+30)
+R0 = 30/(8771761+142+37+30)
+
+# Add initial variables to list
+S.append(S0)
+E.append(E0) 
+I.append(I0) 
+R.append(R0) 
 
 # Parameter values 
 h = 1
