@@ -1,4 +1,4 @@
-# numerical_methods
+# Solving SEIRS model with RK4 method
 
 Code for SSCM2423 Numerical Methods I Group Assignment
 
