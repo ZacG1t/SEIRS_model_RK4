@@ -39,49 +39,49 @@ theta = 0.0187
 
 # Define system of differential equations 
 # dS/dt 
-def dS(R, E, S):
+def dS(T, S, E, I, R):
     return (1 - sigma)*theta*N + delta*R - beta*S*E - mu*S 
 # dE/dt
-def dE(S, E):
+def dE(T, S, E, I, R):
     return beta*S*E - alpha*E - mu*E
 # dI/dt 
-def dI(E, I):
+def dI(T, S, E, I, R):
     return alpha*E - gamma*I - mu*I 
 # dR/dt 
-def dR(I, R):
+def dR(T, S, E, I, R):
     return gamma*I + sigma*theta*N - delta*R - mu*R
 
-# RK4 calculation
-for i in range(0,100):
-    # k for dS/dt
-    # l for dE/dt 
-    # m for dI/dt
-    # n for dR/dt 
+# Runge-Kutta method calculation
+# k for dS/dt
+# l for dE/dt 
+# m for dI/dt
+# n for dR/dt 
+for i in range(0,100): 
+    
+    k1 = h*dS(i, S[i], E[i], I[i], R[i])
+    l1 = h*dE(i, S[i], E[i], I[i], R[i])
+    m1 = h*dI(i, S[i], E[i], I[i], R[i])
+    n1 = h*dR(i, S[i], E[i], I[i], R[i])
 
-    k1 = h * dS(R[i], E[i], S[i])
-    l1 = h * dE(S[i], E[i]) 
-    m1 = h * dI(E[i], I[i]) 
-    n1 = h * dR(I[i], R[i]) 
+    k2 = h*dS(i+0.5*h, S[i]+0.5*(h*k1), E[i]+0.5*(h*l1), I[i]+0.5*(h*m1), R[i]+0.5*(h*n1))
+    l2 = h*dE(i+0.5*h, S[i]+0.5*(h*k1), E[i]+0.5*(h*l1), I[i]+0.5*(h*m1), R[i]+0.5*(h*n1))
+    m2 = h*dI(i+0.5*h, S[i]+0.5*(h*k1), E[i]+0.5*(h*l1), I[i]+0.5*(h*m1), R[i]+0.5*(h*n1))
+    n2 = h*dR(i+0.5*h, S[i]+0.5*(h*k1), E[i]+0.5*(h*l1), I[i]+0.5*(h*m1), R[i]+0.5*(h*n1))
 
-    k2 = h * dS(R[i]+(h/2)*(n1), E[i]+(h/2)*(l1), S[i]+(k1/2))
-    l2 = h * dE(S[i]+(h/2)*(l1), E[i]+(l1/2))
-    m2 = h * dI(E[i]+(l1/2), I[i]+(m1/2))
-    n2 = h * dR(I[i]+(m1/2), R[i]+(n1/2)) 
+    k3 = h*dS(i+0.5*h, S[i]+0.5*(h*k2), E[i]+0.5*(h*l2), I[i]+0.5*(h*m2), R[i]+0.5*(h*n2))
+    l3 = h*dE(i+0.5*h, S[i]+0.5*(h*k2), E[i]+0.5*(h*l2), I[i]+0.5*(h*m2), R[i]+0.5*(h*n2))
+    m3 = h*dI(i+0.5*h, S[i]+0.5*(h*k2), E[i]+0.5*(h*l2), I[i]+0.5*(h*m2), R[i]+0.5*(h*n2))
+    n3 = h*dR(i+0.5*h, S[i]+0.5*(h*k2), E[i]+0.5*(h*l2), I[i]+0.5*(h*m2), R[i]+0.5*(h*n2))
 
-    k3 = h * dS(R[i]+(h/2)*(n2), E[i]+(h/2)*(l2), S[i]+(k2/2))
-    l3 = h * dE(S[i]+(k2/2), E[i]+(l2/2)) 
-    m3 = h * dI(E[i]+(l2/2), I[i]+(m2/2))
-    n3 = h * dR(I[i]+(m2/2), R[i]+(n2/2)) 
+    k4 = h*dS(i+h, S[i]+h*k3, E[i]+h*l3, I[i]+h*m3, R[i]+h*n3)
+    l4 = h*dE(i+h, S[i]+h*k3, E[i]+h*l3, I[i]+h*m3, R[i]+h*n3)
+    m4 = h*dI(i+h, S[i]+h*k3, E[i]+h*l3, I[i]+h*m3, R[i]+h*n3)
+    n4 = h*dR(i+h, S[i]+h*k3, E[i]+h*l3, I[i]+h*m3, R[i]+h*n3)
 
-    k4 = h * dS(R[i]+n3, E[i]+l3, S[i]+k3)
-    l4 = h * dE(S[i]+k3, E[i]+l3)
-    m4 = h * dI(E[i]+l3, I[i]+m3)
-    n4 = h * dR(I[i]+m3, R[i]+n3)
-
-    S.append(S[i] + ((1/6) * h * (k1 + 2*k2 + 2*k3 + k4)))
-    E.append(E[i] + ((1/6) * h * (l1 + 2*l2 + 2*l3 + l4)))
-    I.append(I[i] + ((1/6) * h * (m1 + 2*m2 + 2*m3 + m4)))
-    R.append(R[i] + ((1/6) * h * (n1 + 2*n2 + 2*n3 + n4)))
+    S.append(S[i] + (1/6)*h*(k1 + 2*k2 + 2*k3 + k4))
+    E.append(E[i] + (1/6)*h*(l1 + 2*l2 + 2*l3 + l4))
+    I.append(I[i] + (1/6)*h*(m1 + 2*m2 + 2*m3 + m4))
+    R.append(R[i] + (1/6)*h*(n1 + 2*n2 + 2*n3 + n4))
 
 t = list(range(0,101))
 d = {'t':t, 'S(t)':S, 'E(t)':E, 'I(t)':I, 'R(t)':R}
