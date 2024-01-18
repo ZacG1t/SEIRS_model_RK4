@@ -89,15 +89,28 @@ df = pd.DataFrame(data=d)
 df
 
 # Plot 
-figure, axis = plt.subplots(2, 2, figsize=(12, 7))
-axis[0, 0].scatter(t, S, s=10)
+figure, axis = plt.subplots(2, 2, figsize=(12, 7), sharex=True)
+
 axis[0, 0].set_title("No of population susceptible to Rubella over time")
-axis[0, 1].scatter(t, E, s=10)
+axis[0, 0].scatter(t, S, s=10)
+axis[0, 0].set_ylabel("S(t)")
+axis[0, 0].set_xlabel("t")
+
 axis[0, 1].set_title("No of population with symptoms of Rubella over time")
-axis[1, 0].scatter(t, I, s=10)
+axis[0, 1].scatter(t, E, s=10)
+axis[0, 1].set_ylabel("E(t)")
+axis[0, 1].set_xlabel("t")
+
 axis[1, 0].set_title("No of population infected with Rubella over time")
-axis[1, 1].scatter(t, R, s=10)
+axis[1, 0].scatter(t, I, s=10)
+axis[1, 0].set_ylabel("I(t)")
+axis[1, 0].set_xlabel("t")
+
 axis[1, 1].set_title("No of population recovered from Rubella over time")
+axis[1, 1].scatter(t, R, s=10)
+axis[1, 1].set_ylabel("R(t)")
+axis[1, 1].set_xlabel("t")
+
 plt.show()
 
 # Export data to csv file
