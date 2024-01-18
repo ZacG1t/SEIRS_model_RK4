@@ -101,4 +101,4 @@ axis[1, 1].set_title("No of population recovered from Rubella over time")
 plt.show()
 
 # Export data to csv file
-df.to_csv('data.csv')
+df.to_csv('result.csv')
